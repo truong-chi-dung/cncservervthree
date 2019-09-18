@@ -84,4 +84,8 @@ public class PartCountReactiveService {
 	public List<PartCountReactive> getAll() {
 		return partCountReactiveRepository.findAll();
 	}
+	
+	public List<PartCountReactive> getByDeviceId(String id) {
+		return partCountReactiveRepository.findByDeviceId(id);
+	}
 }

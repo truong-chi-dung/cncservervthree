@@ -91,5 +91,9 @@ public class OperationStatusReactiveService {
 	public List<OperationStatusReactive> getAll() {
 		return operationStatusReactiveRepository.findAll();
 	}
+	
+	public List<OperationStatusReactive> getOpStatusByDeviceId(String id){
+		return operationStatusReactiveRepository.findByDeviceId(id);
+	}
 
 }

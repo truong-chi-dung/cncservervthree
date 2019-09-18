@@ -14,5 +14,7 @@ public interface OperationStatusReactiveRepository extends MongoRepository<Opera
 	public List<OperationStatusReactive> findByDeviceIdOrderByIdDesc(String uuid, PageRequest pageRequest);
 
 	public boolean existsByDeviceId(String uuid);
+	
+	public List<OperationStatusReactive> findByDeviceId(String uuid);
 
 }

@@ -16,5 +16,7 @@ public interface PartCountReactiveRepository extends MongoRepository<PartCountRe
 	public boolean existsByDeviceId(String uuid);
 
 	public List<PartCountReactive> findByDeviceIdOrderByIdDesc(String uuid, PageRequest of);
+	
+	public List<PartCountReactive> findByDeviceId(String uuid);
 
 }

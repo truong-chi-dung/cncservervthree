@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dtc.cncservervthree.exception.DeviceNotFoundException;
@@ -53,8 +54,18 @@ public class StreamsController {
 		return operationStatusReactiveService.getAll();
 	}
 	
+	@GetMapping("streams/opstatus/{id}")
+	public List<OperationStatusReactive> getOperationStatusByDeviceId(@PathVariable String id) {
+		return operationStatusReactiveService.getOpStatusByDeviceId(id);
+	}
+	
 	@GetMapping("streams/partcount")
 	public List<PartCountReactive> getAllPartCount() {
 		return partCountReactiveService.getAll();
+	}
+	
+	@GetMapping("streams/partcount/{id}")
+	public List<PartCountReactive> getPartCountByDeviceId(@PathVariable String id) {
+		return partCountReactiveService.getByDeviceId(id);
 	}
 }
