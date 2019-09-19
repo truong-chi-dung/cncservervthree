@@ -2,8 +2,10 @@ package com.dtc.cncservervthree.repository;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.dtc.cncservervthree.model.stream.PartCountReactive;
@@ -18,5 +20,8 @@ public interface PartCountReactiveRepository extends MongoRepository<PartCountRe
 	public List<PartCountReactive> findByDeviceIdOrderByIdDesc(String uuid, PageRequest of);
 	
 	public List<PartCountReactive> findByDeviceId(String uuid);
+	
+	@Query("{'deviceId': ?0, '_id': { $gte: ?1, $lte: ?2 }}")
+	public List<PartCountReactive> queryByDeviceIdAndPeriod(String uuid, ObjectId objIdStartTime, ObjectId objIdEndTime);
 
 }

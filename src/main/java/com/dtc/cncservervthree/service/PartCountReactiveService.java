@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
@@ -87,5 +88,10 @@ public class PartCountReactiveService {
 	
 	public List<PartCountReactive> getByDeviceId(String id) {
 		return partCountReactiveRepository.findByDeviceId(id);
+	}
+	
+	
+	public List<PartCountReactive> getByDeviceIdAndPeriod(String id, ObjectId objIdStartTime, ObjectId objIdEndTime) {
+		return partCountReactiveRepository.queryByDeviceIdAndPeriod(id, objIdStartTime, objIdEndTime);
 	}
 }
