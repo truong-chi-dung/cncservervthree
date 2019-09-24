@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBException;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import com.dtc.cncservervthree.service.DeviceStreamService;
 import com.dtc.cncservervthree.service.OperationStatusReactiveService;
 import com.dtc.cncservervthree.service.PartCountReactiveService;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class StreamsController {
 

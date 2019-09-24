@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import com.dtc.cncservervthree.exception.DeviceNotFoundException;
 import com.dtc.cncservervthree.model.device.Device;
 import com.dtc.cncservervthree.service.DeviceService;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class DevicesController {
 
