@@ -80,20 +80,33 @@ public class StreamsController {
 	@GetMapping("streams/partcount/period/{id}")
 	public List<PartCountReactive> getPartCountByDeviceIdAndPeriod(@PathVariable String id,
 			@RequestParam(value = "startTime", required = false, defaultValue = "") String startTime,
-			@RequestParam(value = "endTime", required = false, defaultValue = "") String endTime)
-			throws ParseException {
+			@RequestParam(value = "endTime", required = false, defaultValue = "") String endTime,
+			@RequestParam(value = "shift", required = false, defaultValue = "") String shift) throws ParseException {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		if (startTime.equals("") || endTime.equals("")) {
+		if (startTime.equals("") && endTime.equals("")) {
 			Date date = new Date();
 			SimpleDateFormat todayDayFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String todayDayStr = todayDayFormat.format(date);
 			return partCountReactiveService.getByDeviceIdAndPeriod(id,
 					new ObjectId(dateFormat.parse(todayDayStr + "T00:00:00")),
-					new ObjectId(dateFormat.parse(todayDayStr + "T23:59:59")));
+					new ObjectId(dateFormat.parse(todayDayStr + "T23:59:59")));			
+		} else if (shift.equals("1")) {
+			return partCountReactiveService.getByDeviceIdAndPeriod(id,
+					new ObjectId(dateFormat.parse(startTime + "T06:00:00")),
+					new ObjectId(dateFormat.parse(endTime + "T13:59:59")));
+		} else if (shift.equals("2")) {
+			return partCountReactiveService.getByDeviceIdAndPeriod(id,
+					new ObjectId(dateFormat.parse(startTime + "T14:00:00")),
+					new ObjectId(dateFormat.parse(endTime + "T21:59:59")));
+		} else if (shift.equals("3")) {
+			return partCountReactiveService.getByDeviceIdAndPeriod(id,
+					new ObjectId(dateFormat.parse(startTime + "T22:00:00")),
+					new ObjectId(dateFormat.parse(endTime + "T05:59:59")));
+		} else {
+			return partCountReactiveService.getByDeviceIdAndPeriod(id,
+					new ObjectId(dateFormat.parse(startTime + "T00:00:00")),
+					new ObjectId(dateFormat.parse(endTime + "T23:59:59")));
 		}
-		return partCountReactiveService.getByDeviceIdAndPeriod(id,
-				new ObjectId(dateFormat.parse(startTime + "T00:00:00")),
-				new ObjectId(dateFormat.parse(endTime + "T23:59:59")));
 	}
 }
