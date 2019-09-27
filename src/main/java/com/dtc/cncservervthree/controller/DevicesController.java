@@ -40,6 +40,11 @@ public class DevicesController {
 		return deviceService.createDeviceFromAgent();
 	}
 	
+	@GetMapping("devices/delete")
+	public void deleteDevices() throws MalformedURLException, ClassNotFoundException, JAXBException {
+		deviceService.deleteNonExistDevice();
+	}
+	
 	@GetMapping("devices/{id}")
 	public Optional<Device> getDevice(@PathVariable String id) {
 		try {
