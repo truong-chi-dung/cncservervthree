@@ -58,8 +58,8 @@ public class PartCountReactiveService {
 					if (partCountReactiveRepository.existsByDeviceId(deviceStream.getUuid())) {
 						List<PartCountReactive> currentPartCountReactives = partCountReactiveRepository
 								.findByDeviceIdOrderByIdDesc(deviceStream.getUuid(), PageRequest.of(0, 1));
-						if (!currentPartCountReactives.get(0).getPartCount()
-								.equals(componentStream.getEvents().getPartCount())) {
+						if (!currentPartCountReactives.get(0).getPartCount().equals(componentStream.getEvents().getPartCount())
+								&& currentPartCountReactives.get(0).getPartCount().equals("UNAVAILABLE")) {
 							createNewPartCountReactive(deviceStream.getUuid(),
 									componentStream.getEvents().getPartCount());
 							// Update value into Device Model
@@ -81,16 +81,15 @@ public class PartCountReactiveService {
 		partCountReactiveRepository.save(partCountReactive);
 		System.out.println("part count updated");
 	}
-	
+
 	public List<PartCountReactive> getAll() {
 		return partCountReactiveRepository.findAll();
 	}
-	
+
 	public List<PartCountReactive> getByDeviceId(String id) {
 		return partCountReactiveRepository.findByDeviceId(id);
 	}
-	
-	
+
 	public List<PartCountReactive> getByDeviceIdAndPeriod(String id, ObjectId objIdStartTime, ObjectId objIdEndTime) {
 		return partCountReactiveRepository.queryByDeviceIdAndPeriod(id, objIdStartTime, objIdEndTime);
 	}
