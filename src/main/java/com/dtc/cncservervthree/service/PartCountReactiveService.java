@@ -2,6 +2,7 @@ package com.dtc.cncservervthree.service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -58,15 +59,39 @@ public class PartCountReactiveService {
 					if (partCountReactiveRepository.existsByDeviceId(deviceStream.getUuid())) {
 						List<PartCountReactive> currentPartCountReactives = partCountReactiveRepository
 								.findByDeviceIdOrderByIdDesc(deviceStream.getUuid(), PageRequest.of(0, 1));
-						if (!currentPartCountReactives.get(0).getPartCount().equals(componentStream.getEvents().getPartCount())
+						if (!currentPartCountReactives.get(0).getPartCount()
+								.equals(componentStream.getEvents().getPartCount())
 								&& currentPartCountReactives.get(0).getPartCount().equals("UNAVAILABLE")) {
-							createNewPartCountReactive(deviceStream.getUuid(),
-									componentStream.getEvents().getPartCount());
+							// Create part count log
+							if (LocalTime.now().isAfter(LocalTime.parse("06:00:00"))
+									&& LocalTime.now().isBefore(LocalTime.parse("13:59:59"))) {
+								createNewPartCountReactive(deviceStream.getUuid(),
+										componentStream.getEvents().getPartCount(), "1");
+							} else if (LocalTime.now().isAfter(LocalTime.parse("14:00:00"))
+									&& LocalTime.now().isBefore(LocalTime.parse("21:59:59"))) {
+								createNewPartCountReactive(deviceStream.getUuid(),
+										componentStream.getEvents().getPartCount(), "2");
+							} else {
+								createNewPartCountReactive(deviceStream.getUuid(),
+										componentStream.getEvents().getPartCount(), "3");
+							}
 							// Update value into Device Model
 							deviceService.updateDeviceInfo(componentStream.getEvents(), deviceStream.getUuid());
 						}
 					} else {
-						createNewPartCountReactive(deviceStream.getUuid(), componentStream.getEvents().getPartCount());
+						// Create part count log
+						if (LocalTime.now().isAfter(LocalTime.parse("06:00:00"))
+								&& LocalTime.now().isBefore(LocalTime.parse("13:59:59"))) {
+							createNewPartCountReactive(deviceStream.getUuid(),
+									componentStream.getEvents().getPartCount(), "1");
+						} else if (LocalTime.now().isAfter(LocalTime.parse("14:00:00"))
+								&& LocalTime.now().isBefore(LocalTime.parse("21:59:59"))) {
+							createNewPartCountReactive(deviceStream.getUuid(),
+									componentStream.getEvents().getPartCount(), "2");
+						} else {
+							createNewPartCountReactive(deviceStream.getUuid(),
+									componentStream.getEvents().getPartCount(), "3");
+						}
 					}
 				}
 			}
@@ -74,10 +99,11 @@ public class PartCountReactiveService {
 		}
 	}
 
-	public void createNewPartCountReactive(String uuid, String partCount) {
+	public void createNewPartCountReactive(String uuid, String partCount, String shift) {
 		PartCountReactive partCountReactive = new PartCountReactive();
 		partCountReactive.setDeviceId(uuid);
 		partCountReactive.setPartCount(partCount);
+		partCountReactive.setShift(shift);
 		partCountReactiveRepository.save(partCountReactive);
 		System.out.println("part count updated");
 	}

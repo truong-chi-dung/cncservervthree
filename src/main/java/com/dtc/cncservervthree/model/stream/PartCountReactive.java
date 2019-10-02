@@ -13,4 +13,6 @@ public class PartCountReactive {
 	private String deviceId;
 	
 	private String partCount;
+	
+	private String shift;
 }
