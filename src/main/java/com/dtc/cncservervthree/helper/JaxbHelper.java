@@ -12,19 +12,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class JaxbHelper {
 
-	public static <T> T unmarshall(File xmlFile, Class<T> unmarshallClass) throws JAXBException {
+	public static <T> Object unmarshall(File xmlFile, Class<T> unmarshallClass) throws JAXBException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(unmarshallClass);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		@SuppressWarnings("unchecked")
-		T object = (T) jaxbUnmarshaller.unmarshal(xmlFile);
-		return object;
+		return jaxbUnmarshaller.unmarshal(xmlFile);
 	}
 
-	public static <T> T unmarshall(URL url, Class<T> unmarshallClass) throws JAXBException {
+	public static <T> Object unmarshall(URL url, Class<T> unmarshallClass) throws JAXBException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(unmarshallClass);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		@SuppressWarnings("unchecked")
-		T object = (T) jaxbUnmarshaller.unmarshal(url);
-		return object;
+		return jaxbUnmarshaller.unmarshal(url);
 	}
 }
