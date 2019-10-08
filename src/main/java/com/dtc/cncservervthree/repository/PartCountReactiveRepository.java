@@ -23,5 +23,8 @@ public interface PartCountReactiveRepository extends MongoRepository<PartCountRe
 	
 	@Query("{'deviceId': ?0, '_id': { $gte: ?1, $lte: ?2 }}")
 	public List<PartCountReactive> queryByDeviceIdAndPeriod(String uuid, ObjectId objIdStartTime, ObjectId objIdEndTime);
+	
+	@Query("{'deviceId': ?0, '_id': { $gte: ?1, $lte: ?2 }}, 'shift': ?3")
+	public List<PartCountReactive> queryByDeviceIdAndPeriodAndShift(String uuid, ObjectId objIdStartTime, ObjectId objIdEndTime, String shift);
 
 }
