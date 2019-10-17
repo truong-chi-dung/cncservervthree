@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.dtc.cncservervthree.exception.DeviceNotFoundException;
 import com.dtc.cncservervthree.helper.JaxbHelper;
 import com.dtc.cncservervthree.model.device.Device;
+import com.dtc.cncservervthree.model.device.DeviceCsv;
 import com.dtc.cncservervthree.model.stream.Events;
 import com.dtc.cncservervthree.model.device.MTConnectDevices;
 import com.dtc.cncservervthree.repository.DeviceRepository;
@@ -99,4 +100,13 @@ public class DeviceService {
 		}
 		return deviceRepository.findById(id);
 	}
+	
+	public List<DeviceCsv> translateToDeviceCsv(List<Device> devices) {
+		List<DeviceCsv> devicesCsv = new ArrayList<>();
+		for (Device device : devices) {
+			devicesCsv.add(new DeviceCsv(device.getDescription().getManufacturer(), device.getDescription().getModel(), device.getCurrentPartsCount(), device.getCurrentOperationStatus()));
+		}
+		return devicesCsv;
+	}
+	
 }
