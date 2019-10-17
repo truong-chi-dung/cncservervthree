@@ -9,6 +9,8 @@ import java.util.Optional;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import com.dtc.cncservervthree.exception.DeviceNotFoundException;
 import com.dtc.cncservervthree.helper.JaxbHelper;
@@ -31,7 +33,7 @@ public class DeviceService {
 	JaxbHelper jaxbHelper;
 
 	public List<Device> getAllDevice() {
-		return deviceRepository.findAll();
+		return deviceRepository.findAll(Sort.by(Direction.ASC,"description.model"));
 	}
 
 	public void deleteNonExistDevice() throws MalformedURLException, ClassNotFoundException, JAXBException {
