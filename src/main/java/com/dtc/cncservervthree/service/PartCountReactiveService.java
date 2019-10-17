@@ -59,9 +59,13 @@ public class PartCountReactiveService {
 					if (partCountReactiveRepository.existsByDeviceId(deviceStream.getUuid())) {
 						List<PartCountReactive> currentPartCountReactives = partCountReactiveRepository
 								.findByDeviceIdOrderByIdDesc(deviceStream.getUuid(), PageRequest.of(0, 1));
+//						if (!currentPartCountReactives.get(0).getPartCount()
+//								.equals(componentStream.getEvents().getPartCount())
+//								&& !currentPartCountReactives.get(0).getPartCount().equals("UNAVAILABLE")) {
+						// Check if the new part count is different from previous value and not equal to UNAVAILABLE.
 						if (!currentPartCountReactives.get(0).getPartCount()
 								.equals(componentStream.getEvents().getPartCount())
-								&& currentPartCountReactives.get(0).getPartCount().equals("UNAVAILABLE")) {
+								&& !componentStream.getEvents().getPartCount().equals("UNAVAILABLE")) {
 							// Create part count log
 							if (LocalTime.now().isAfter(LocalTime.parse("06:00:00"))
 									&& LocalTime.now().isBefore(LocalTime.parse("13:59:59"))) {
