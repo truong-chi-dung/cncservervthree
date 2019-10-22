@@ -1,6 +1,7 @@
 package com.dtc.cncservervthree.controller;
 
 import java.net.MalformedURLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,9 +67,10 @@ public class DevicesController {
 	@GetMapping("devices/csv")
 	public void exportCSV(HttpServletResponse response) throws Exception {
 		
+		Date today = new Date();
 		
 		//set file name and content type
-		String filename = "test.csv";
+		String filename = today + "partcount.csv";
 		
 		response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
