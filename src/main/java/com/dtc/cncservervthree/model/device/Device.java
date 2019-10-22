@@ -28,4 +28,6 @@ public class Device {
 	private String currentPartsCount;
 
 	private String lineNo;
+	
+	private String emgStop;
 }

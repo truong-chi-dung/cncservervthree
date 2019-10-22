@@ -13,4 +13,6 @@ public class Events {
 	private String ControllerMode;
 
 	private String PartCount;
+	
+	private String EmergencyStop;
 }

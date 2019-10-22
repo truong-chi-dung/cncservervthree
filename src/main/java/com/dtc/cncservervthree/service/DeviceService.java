@@ -92,6 +92,17 @@ public class DeviceService {
 		return deviceRepository.findById(id).map(device -> {
 			device.setCurrentOperationStatus(events.getExecution());
 			device.setCurrentPartsCount(events.getPartCount());
+//			device.setEmgStop(events.getEmergencyStop());
+			return deviceRepository.save(device);
+		});
+	}
+	
+	public Optional<Device> updateDeviceEmgStopInfo(Events events, String id) throws DeviceNotFoundException {
+		if (!deviceRepository.existsById(id)) {
+			throw new DeviceNotFoundException("Device Not Found");
+		}
+		return deviceRepository.findById(id).map(device -> {
+			device.setEmgStop(events.getEmergencyStop());
 			return deviceRepository.save(device);
 		});
 	}

@@ -17,13 +17,13 @@ import com.dtc.cncservervthree.exception.DeviceNotFoundException;
 import com.dtc.cncservervthree.helper.JaxbHelper;
 import com.dtc.cncservervthree.model.stream.ComponentStream;
 import com.dtc.cncservervthree.model.stream.DeviceStream;
+import com.dtc.cncservervthree.model.stream.EmergencyStopReactive;
 import com.dtc.cncservervthree.model.stream.MTConnectStreams;
-import com.dtc.cncservervthree.model.stream.OperationStatusReactive;
-import com.dtc.cncservervthree.repository.OperationStatusReactiveRepository;
+import com.dtc.cncservervthree.repository.EmergencyStopReactiveRepository;
 
 @EnableAsync
 @Service
-public class OperationStatusReactiveService {
+public class EmergencyStopReactiveService {
 	
 	private String sampleXmlUrl = "http://localhost:5000/current";	
 	private String mtConnectStreamsModelPath = "com.dtc.cncservervthree.model.stream.MTConnectStreams";
@@ -35,11 +35,11 @@ public class OperationStatusReactiveService {
 	DeviceService deviceService;
 
 	@Autowired
-	OperationStatusReactiveRepository operationStatusReactiveRepository;
-
+	EmergencyStopReactiveRepository emergencyStopReactiveRepository;
+	
 	@Async
 	@Scheduled(fixedRate = 5000)
-	public void createOperationStatusLog()
+	public void createEmergencyStopLog()
 			throws ClassNotFoundException, JAXBException, DeviceNotFoundException, MalformedURLException {
 		MTConnectStreams mtConnectStreams = null;
 		// Mapping information from xml to mtConnectStreams object;
@@ -52,23 +52,23 @@ public class OperationStatusReactiveService {
 			// Loops through componentStream and find "path" name attribute to get Event
 			// element.
 			for (ComponentStream componentStream : deviceStream.getComponentStream()) {
-				if (componentStream.getName().equals("path") && componentStream.getEvents().getExecution() != null) {
+				if (componentStream.getName().equals("Controller") && componentStream.getEvents().getEmergencyStop() != null) {
 					// After check null, compare the last update value, if it is different then
 					// create log
-					if (operationStatusReactiveRepository.existsByDeviceId(deviceStream.getUuid())) {
-						List<OperationStatusReactive> currentOperationStatusReactives = operationStatusReactiveRepository
+					if (emergencyStopReactiveRepository.existsByDeviceId(deviceStream.getUuid())) {
+						List<EmergencyStopReactive> currentEmergencyStopReactives = emergencyStopReactiveRepository
 								.findByDeviceIdOrderByIdDesc(deviceStream.getUuid(), PageRequest.of(0, 1));
-						if (!currentOperationStatusReactives.get(0).getOperationStatus()
-								.equals(componentStream.getEvents().getExecution())) {
-							createNewOperationStatusReactive(deviceStream.getUuid(),
-									componentStream.getEvents().getExecution());
+						if (!currentEmergencyStopReactives.get(0).getEmgStop()
+								.equals(componentStream.getEvents().getEmergencyStop())) {
+							createNewEmergencyStopReactive(deviceStream.getUuid(),
+									componentStream.getEvents().getEmergencyStop());
 							// Update value into Device Model
-							deviceService.updateDeviceInfo(componentStream.getEvents(), deviceStream.getUuid());
-							System.out.println("operation status updated");
+							deviceService.updateDeviceEmgStopInfo(componentStream.getEvents(), deviceStream.getUuid());
+							System.out.println("emgStop updated");
 						}
 					} else {
-						createNewOperationStatusReactive(deviceStream.getUuid(),
-								componentStream.getEvents().getExecution());
+						createNewEmergencyStopReactive(deviceStream.getUuid(),
+								componentStream.getEvents().getEmergencyStop());
 					}
 
 				}
@@ -77,24 +77,23 @@ public class OperationStatusReactiveService {
 		}
 	}
 
-	public List<OperationStatusReactive> testRetrieve(String uuid, PageRequest pageRequest) {
-		return operationStatusReactiveRepository.findByDeviceIdOrderByIdDesc(uuid, pageRequest);
+	public List<EmergencyStopReactive> testRetrieve(String uuid, PageRequest pageRequest) {
+		return emergencyStopReactiveRepository.findByDeviceIdOrderByIdDesc(uuid, pageRequest);
 	}
 
-	public void createNewOperationStatusReactive(String uuid, String execution) {
-		OperationStatusReactive operationStatusReactive = new OperationStatusReactive();
-		operationStatusReactive.setDeviceId(uuid);
-		operationStatusReactive.setOperationStatus(execution);
-		operationStatusReactiveRepository.save(operationStatusReactive);
-		System.out.println("operation status created");
+	public void createNewEmergencyStopReactive(String uuid, String emgStop) {
+		EmergencyStopReactive emergencyStopReactive = new EmergencyStopReactive();
+		emergencyStopReactive.setDeviceId(uuid);
+		emergencyStopReactive.setEmgStop(emgStop);
+		emergencyStopReactiveRepository.save(emergencyStopReactive);
+		System.out.println("emgStop created");
 	}
 	
-	public List<OperationStatusReactive> getAll() {
-		return operationStatusReactiveRepository.findAll();
+	public List<EmergencyStopReactive> getAll() {
+		return emergencyStopReactiveRepository.findAll();
 	}
 	
-	public List<OperationStatusReactive> getOpStatusByDeviceId(String id){
-		return operationStatusReactiveRepository.findByDeviceId(id);
+	public List<EmergencyStopReactive> getOpStatusByDeviceId(String id){
+		return emergencyStopReactiveRepository.findByDeviceId(id);
 	}
-
 }
