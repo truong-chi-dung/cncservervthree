@@ -10,9 +10,9 @@ public class DeviceCsv {
 	private String name;
 
 	private String lineNo;
-		
-	private String currentOperationStatus;	
 	
-	private String currentPartsCount;
+	private String partsCount;
+		
+	private String status;	
 	
 }

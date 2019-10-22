@@ -70,7 +70,7 @@ public class DevicesController {
 		Date today = new Date();
 		
 		//set file name and content type
-		String filename = today + "partcount.csv";
+		String filename = today + "_partcount.csv";
 		
 		response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
