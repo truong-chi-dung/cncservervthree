@@ -40,7 +40,7 @@ public class PartCountReactiveService {
 	PartCountReactiveRepository partCountReactiveRepository;
 
 	@Async
-	@Scheduled(fixedRate = 5000)
+	@Scheduled(fixedRate = 8000)
 	public void createPartCountLog()
 			throws ClassNotFoundException, JAXBException, DeviceNotFoundException, MalformedURLException {
 		MTConnectStreams mtConnectStreams = null;
