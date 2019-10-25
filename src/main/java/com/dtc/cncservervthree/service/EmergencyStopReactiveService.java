@@ -38,7 +38,7 @@ public class EmergencyStopReactiveService {
 	EmergencyStopReactiveRepository emergencyStopReactiveRepository;
 	
 	@Async
-	@Scheduled(fixedRate = 10000)
+	@Scheduled(fixedRate = 6000)
 	public void createEmergencyStopLog()
 			throws ClassNotFoundException, JAXBException, DeviceNotFoundException, MalformedURLException {
 		MTConnectStreams mtConnectStreams = null;

@@ -117,7 +117,7 @@ public class DeviceService {
 	public List<DeviceCsv> translateToDeviceCsv(List<Device> devices) {
 		List<DeviceCsv> devicesCsv = new ArrayList<>();
 		for (Device device : devices) {
-			devicesCsv.add(new DeviceCsv(device.getDescription().getManufacturer(), device.getDescription().getModel(), device.getCurrentPartsCount(), device.getCurrentOperationStatus()));
+			devicesCsv.add(new DeviceCsv(device.getDescription().getManufacturer(), "'" + device.getDescription().getModel(), device.getCurrentPartsCount(), device.getCurrentOperationStatus()));
 		}
 		return devicesCsv;
 	}
