@@ -33,7 +33,8 @@ public class DeviceService {
 	JaxbHelper jaxbHelper;
 
 	public List<Device> getAllDevice() {
-		return deviceRepository.findAll(Sort.by(Direction.ASC,"description.model"));
+		return deviceRepository.findAll(Sort.by(Direction.ASC, "description.model"));
+//		return deviceRepository.findAll();
 	}
 
 	public void deleteNonExistDevice() throws MalformedURLException, ClassNotFoundException, JAXBException {
@@ -43,7 +44,7 @@ public class DeviceService {
 		List<Device> xmlDeviceList = mtConnectDevices.getDevices().getDeviceList();
 		List<Device> dbDeviceList = deviceRepository.findAll();
 		ArrayList<String> nonExistDeviceListId = new ArrayList<String>();
-		
+
 		for (Device dbDevice : dbDeviceList) {
 			boolean isDeviceExist = false;
 			for (Device xmlDevice : xmlDeviceList) {
@@ -91,12 +92,28 @@ public class DeviceService {
 		}
 		return deviceRepository.findById(id).map(device -> {
 			device.setCurrentOperationStatus(events.getExecution());
-			device.setCurrentPartsCount(events.getPartCount());
-//			device.setEmgStop(events.getEmergencyStop());
+//			device.setCurrentPartsCount(events.getPartCount());
+			if (this.isNumeric(events.getPartCount())) {
+				device.setCurrentPartsCount(Integer.parseInt(events.getPartCount()));
+			} else {
+				device.setCurrentPartsCount(0);
+			}
 			return deviceRepository.save(device);
 		});
 	}
-	
+
+	public Optional<Device> updateDevice(Device deviceInfo, String id) throws DeviceNotFoundException {
+		if (!deviceRepository.existsById(id)) {
+			throw new DeviceNotFoundException("Device Not Found");
+		}
+		return deviceRepository.findById(id).map(device -> {
+			device.setDescription(deviceInfo.getDescription());
+			device.setPartNo(deviceInfo.getPartNo());
+			device.setProdTarget(deviceInfo.getProdTarget());
+			return deviceRepository.save(device);
+		});
+	}
+
 	public Optional<Device> updateDeviceEmgStopInfo(Events events, String id) throws DeviceNotFoundException {
 		if (!deviceRepository.existsById(id)) {
 			throw new DeviceNotFoundException("Device Not Found");
@@ -113,13 +130,27 @@ public class DeviceService {
 		}
 		return deviceRepository.findById(id);
 	}
-	
+
 	public List<DeviceCsv> translateToDeviceCsv(List<Device> devices) {
 		List<DeviceCsv> devicesCsv = new ArrayList<>();
 		for (Device device : devices) {
-			devicesCsv.add(new DeviceCsv(device.getDescription().getManufacturer(), "'" + device.getDescription().getModel(), device.getCurrentPartsCount(), device.getCurrentOperationStatus()));
+			devicesCsv.add(
+					new DeviceCsv(device.getDescription().getModel(), device.getDescription().getManufacturer(),
+							device.getCurrentPartsCount(), device.getPartNo(), device.getProdTarget(), device.getCurrentOperationStatus()));
 		}
 		return devicesCsv;
 	}
-	
+
+	public boolean isNumeric(String strNum) {
+		if (strNum == null) {
+			return false;
+		}
+		try {
+			int d = Integer.parseInt(strNum);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
+	}
+
 }

@@ -25,9 +25,12 @@ public class Device {
 	
 	private String currentOperationStatus;	
 	
-	private String currentPartsCount;
+//	private String currentPartsCount;
+	private int currentPartsCount;
 
-	private String lineNo;
+	private String partNo;
+	
+	private int prodTarget;
 	
 	private String emgStop;
 }

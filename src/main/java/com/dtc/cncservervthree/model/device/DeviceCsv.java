@@ -7,12 +7,16 @@ import lombok.Data;
 @AllArgsConstructor
 public class DeviceCsv {
 
+	private String lineNo;
+
 	private String name;
 
-	private String lineNo;
-	
-	private String partsCount;
-		
-	private String status;	
-	
+	private int partsCount;
+
+	private String partNo;
+
+	private int target;
+
+	private String status;
+
 }

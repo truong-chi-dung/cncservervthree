@@ -11,10 +11,14 @@ import javax.xml.bind.JAXBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -64,6 +68,12 @@ public class DevicesController {
 
 	}
 	
+	@PutMapping(value = "devices/update/{id}", consumes = "application/json", produces = "application/json")
+//	@PutMapping("devices/update/{id}")
+	public Optional<Device> updateDevice(@RequestBody Device device, @PathVariable String id) throws DeviceNotFoundException {
+		return deviceService.updateDevice(device, id);
+	}
+	
 	@GetMapping("devices/csv")
 	public void exportCSV(HttpServletResponse response) throws Exception {
 		
@@ -79,7 +89,7 @@ public class DevicesController {
         StatefulBeanToCsv<DeviceCsv> writer = new StatefulBeanToCsvBuilder<DeviceCsv>(response.getWriter())
         		.withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
         		.withSeparator(CSVWriter.DEFAULT_SEPARATOR)
-                .withOrderedResults(false)
+                .withOrderedResults(true)
                 .build();
         
       //write all users to csv file

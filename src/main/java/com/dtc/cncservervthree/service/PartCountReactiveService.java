@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.bind.JAXBException;
 
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.dtc.cncservervthree.exception.DeviceNotFoundException;
 import com.dtc.cncservervthree.helper.JaxbHelper;
+import com.dtc.cncservervthree.model.device.Device;
 import com.dtc.cncservervthree.model.stream.ComponentStream;
 import com.dtc.cncservervthree.model.stream.DeviceStream;
 import com.dtc.cncservervthree.model.stream.MTConnectStreams;
@@ -59,10 +61,8 @@ public class PartCountReactiveService {
 					if (partCountReactiveRepository.existsByDeviceId(deviceStream.getUuid())) {
 						List<PartCountReactive> currentPartCountReactives = partCountReactiveRepository
 								.findByDeviceIdOrderByIdDesc(deviceStream.getUuid(), PageRequest.of(0, 1));
-//						if (!currentPartCountReactives.get(0).getPartCount()
-//								.equals(componentStream.getEvents().getPartCount())
-//								&& !currentPartCountReactives.get(0).getPartCount().equals("UNAVAILABLE")) {
-						// Check if the new part count is different from previous value and not equal to UNAVAILABLE.
+						// Check if the new part count is different from previous value and not equal to
+						// UNAVAILABLE.
 						if (!currentPartCountReactives.get(0).getPartCount()
 								.equals(componentStream.getEvents().getPartCount())
 								&& !componentStream.getEvents().getPartCount().equals("UNAVAILABLE")) {
